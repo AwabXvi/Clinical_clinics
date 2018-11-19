@@ -48,55 +48,57 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         ref = db.collection("Reservation");
-        if (user != null){
+        if (user != null) {
             clinic_name = user.getDisplayName();
         }
 
+        if (user != null) {
+            ref.whereEqualTo("clinic_name", clinic_name).get().addOnSuccessListener(
+                    new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if (queryDocumentSnapshots.size() == 0) {
+                                Toast.makeText(MainActivity.this, "There are now reservation", Toast.LENGTH_LONG).show();
+                            }
+                            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                name = (String) documentSnapshot.get("patient");
+                                doctor = (String) documentSnapshot.get("doctor");
+                                img_url = (String) documentSnapshot.get("photo_url");
+                                phone = (String) documentSnapshot.get("phone");
+                                Acceptence_state = (Boolean) documentSnapshot.get("acceptence");
+                                mName.add(name);
+                                mDoctor.add(doctor);
+                                mImage.add(img_url);
+                                mAcceptence.add(Acceptence_state);
+                                mPhone.add(phone);
+                                id = (String) documentSnapshot.getId();
+                                mID.add(id);
 
-        ref.whereEqualTo("clinic_name" ,clinic_name ).get().addOnSuccessListener(
-                new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                            name = (String) documentSnapshot.get("patient");
-                            doctor = (String) documentSnapshot.get("doctor");
-                            img_url = (String) documentSnapshot.get("photo_url");
-                            phone = (String)  documentSnapshot.get("phone");
-                            Acceptence_state = (Boolean) documentSnapshot.get("acceptence");
-                            mName.add(name);
-                            mDoctor.add(doctor);
-                            mImage.add(img_url);
-                            mAcceptence.add(Acceptence_state);
-                            mPhone.add(phone);
-                            id = (String) documentSnapshot.getId();
-                            mID.add(id);
+                            }
+
+                            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
+                            recyclerView.setHasFixedSize(true);
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
+                            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                            RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(mName, mAcceptence, mID, mImage, mPhone, mDoctor, MainActivity.this);
+                            recyclerView.setLayoutManager(linearLayoutManager);
+                            recyclerView.setAdapter(recyclerViewAdapter);
 
                         }
-
-                        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
-                        recyclerView.setHasFixedSize(true);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
-                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(mName,mAcceptence,mID,mImage,mPhone,mDoctor,MainActivity.this);
-                        recyclerView.setLayoutManager(linearLayoutManager);
-                        recyclerView.setAdapter(recyclerViewAdapter);
-
                     }
-                }
-        ).addOnFailureListener(
-                new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(MainActivity.this, "query failed", Toast.LENGTH_LONG).show();
+            ).addOnFailureListener(
+                    new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(MainActivity.this, "query failed", Toast.LENGTH_LONG).show();
+                        }
                     }
-                }
-        );
+            );
 
 
+        }
 
     }
-
-
     @Override
     protected void onStart() {
         super.onStart();
