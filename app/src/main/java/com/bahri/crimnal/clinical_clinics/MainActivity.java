@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(MainActivity.this, IntentService.class);
-        startService(intent);
         FirebaseApp.initializeApp(this);
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -53,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (user != null) {
+            Intent intent = new Intent(MainActivity.this, IntentService.class);
+            startService(intent);
             ref.whereEqualTo("clinic_name", clinic_name).get().addOnSuccessListener(
                     new OnSuccessListener<QuerySnapshot>() {
                         @Override
