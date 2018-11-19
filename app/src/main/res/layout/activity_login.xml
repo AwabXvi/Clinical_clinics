@@ -27,7 +27,8 @@
         android:ems="10"
         android:hint="Username"
         tools:layout_editor_absoluteX="48dp"
-        tools:layout_editor_absoluteY="325dp" />
+        tools:layout_editor_absoluteY="325dp"
+        android:inputType="textPersonName"/>
 
     <EditText
         android:id="@+id/email_txt"
@@ -40,7 +41,8 @@
         android:ems="10"
         android:hint="Email"
         tools:layout_editor_absoluteX="47dp"
-        tools:layout_editor_absoluteY="253dp" />
+        tools:layout_editor_absoluteY="253dp"
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/password_txt"
