@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/res_name"
-        android:layout_width="292dp"
+        android:layout_width="242dp"
         android:layout_height="31dp"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/img_view"
@@ -51,7 +51,7 @@
 
     <TextView
         android:id="@+id/res_doctor"
-        android:layout_width="161dp"
+        android:layout_width="112dp"
         android:layout_height="35dp"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/doctor_string"

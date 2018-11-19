@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -113,14 +114,22 @@ public class login extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(login.this, "Email or password is wrong.",
+                            Toast.makeText(login.this, "Something went  wrong.",
                                     Toast.LENGTH_SHORT).show();
 
                         }
 
                         // ...
                     }
-                });
+                }).addOnFailureListener(
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(login.this, "Email or password is wrong.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
 
     }
 }
