@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MainActivity.this);
                             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                             RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(mName, mAcceptence, mID, mImage, mPhone, mDoctor, MainActivity.this);
+                            if(mDoctor.size()<1)
+                            {
+                                setContentView(R.layout.norervation);
+                            }
                             recyclerView.setLayoutManager(linearLayoutManager);
                             recyclerView.setAdapter(recyclerViewAdapter);
 

@@ -1,5 +1,6 @@
 package com.bahri.crimnal.clinical_clinics;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class login extends AppCompatActivity {
     private Button signin;
     private EditText email_field , password_field , username_field ;
     private  static final String TAG = "login";
+    ProgressDialog progressDoalog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,10 @@ public class login extends AppCompatActivity {
         email_field = (EditText) findViewById(R.id.email_txt);
         password_field = (EditText) findViewById(R.id.password_txt);
         username_field = (EditText) findViewById(R.id.username);
+        progressDoalog = new ProgressDialog(login.this);
+        progressDoalog.setIndeterminate(true);
+        progressDoalog.setMessage("loading..");
+        progressDoalog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
 
 
@@ -51,29 +57,29 @@ public class login extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        email = email_field.getText().toString() ;
+                        email = email_field.getText().toString();
                         password = password_field.getText().toString();
                         Display_name = username_field.getText().toString();
-                        if (email.isEmpty() || email == null){
+                        if (email.isEmpty() || email == null) {
                             email_field.setError("Enter an email");
                             email_field.requestFocus();
-                            if (password.isEmpty() || password == null){
-                                password_field.setError("Enter your password");
-                                password_field.requestFocus();
-
-                            }
-                            if (Display_name.isEmpty() || Display_name == null){
-                                username_field.setError("Enter your password");
-                                username_field.requestFocus();
-
-                            }
+                        } else if (password.isEmpty() || password == null) {
+                            password_field.setError("Enter your password");
+                            password_field.requestFocus();
 
                         }
-                        else{
-                            signInWithFireBase(email , password);
+                        else if (Display_name.isEmpty() || Display_name == null) {
+                            username_field.setError("Enter your username");
+                            username_field.requestFocus();
+
+                        }
+                        else {
+                            progressDoalog.show();
+                            signInWithFireBase(email, password);
                         }
                     }
                 }
+
         );
 
 
@@ -90,6 +96,7 @@ public class login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            progressDoalog.dismiss();
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(login.this, "Authentication success.",
@@ -112,6 +119,8 @@ public class login extends AppCompatActivity {
 
 
                         } else {
+
+                            progressDoalog.dismiss();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(login.this, "Something went  wrong.",
@@ -125,6 +134,8 @@ public class login extends AppCompatActivity {
                 new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+
+                        progressDoalog.dismiss();
                         Toast.makeText(login.this, "Email or password is wrong.",
                                 Toast.LENGTH_SHORT).show();
                     }
